@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="1aa82a5747c04073b260147aaeffb5ee" Name="Diagram1">
+        <EntityTypeShape EntityType="RentBikeModel.Bike" Width="1.5" PointX="3" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RentBikeModel.BikeItems" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="RentBikeModel.Customer" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RentBikeModel.Manager" Width="1.5" PointX="0.75" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RentBikeModel.OrderBike" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="RentBikeModel.Type" Width="1.5" PointX="0.75" PointY="9.5" IsExpanded="true" />
+        <AssociationConnector Association="RentBikeModel.FK_Bike_Type" ManuallyRouted="false" />
+        <AssociationConnector Association="RentBikeModel.FK_BikeItems_Bike" ManuallyRouted="false" />
+        <AssociationConnector Association="RentBikeModel.FK_BikeItems_OrderBike" ManuallyRouted="false" />
+        <AssociationConnector Association="RentBikeModel.FK_OrderBike_Customer1" ManuallyRouted="false" />
+        <AssociationConnector Association="RentBikeModel.FK_OrderBike_Manager1" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

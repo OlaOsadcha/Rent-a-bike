@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище RentBikeModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Bike">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BikeNumber" Type="varchar" MaxLength="50" />
+    <Property Name="TypeId" Type="int" />
+    <Property Name="Price" Type="money" />
+    <Property Name="IsActive" Type="bit" />
+  </EntityType>
+  <EntityType Name="BikeItems">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrderBikeId" Type="int" />
+    <Property Name="BikeId" Type="int" />
+    <Property Name="StartRent" Type="datetime" />
+    <Property Name="FinishRent" Type="datetime" />
+    <Property Name="Pledqe" Type="money" />
+    <Property Name="PriceRent" Type="money" />
+  </EntityType>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="varchar" MaxLength="50" />
+    <Property Name="LastName" Type="varchar" MaxLength="50" />
+    <Property Name="PhoneNumber" Type="varchar" MaxLength="50" />
+    <Property Name="Email" Type="varchar" MaxLength="50" />
+    <Property Name="PassportNumber" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Manager">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+    <Property Name="PhoneNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="Email" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="OrderBike">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CustomerId" Type="int" />
+    <Property Name="ManagerId" Type="int" />
+    <Property Name="Date" Type="datetime" />
+    <Property Name="Total" Type="money" />
+  </EntityType>
+  <EntityType Name="Type">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nchar" MaxLength="10" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Bike_Type">
+    <End Role="Type" Type="Self.Type" Multiplicity="0..1" />
+    <End Role="Bike" Type="Self.Bike" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Type">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Bike">
+        <PropertyRef Name="TypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BikeItems_Bike">
+    <End Role="Bike" Type="Self.Bike" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="BikeItems" Type="Self.BikeItems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Bike">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BikeItems">
+        <PropertyRef Name="BikeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BikeItems_OrderBike">
+    <End Role="OrderBike" Type="Self.OrderBike" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="BikeItems" Type="Self.BikeItems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrderBike">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BikeItems">
+        <PropertyRef Name="OrderBikeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderBike_Customer1">
+    <End Role="Customer" Type="Self.Customer" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="OrderBike" Type="Self.OrderBike" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderBike">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderBike_Manager1">
+    <End Role="Manager" Type="Self.Manager" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="OrderBike" Type="Self.OrderBike" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Manager">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderBike">
+        <PropertyRef Name="ManagerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Хранилище RentBikeModelContainer">
+    <EntitySet Name="Bike" EntityType="Self.Bike" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BikeItems" EntityType="Self.BikeItems" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Manager" EntityType="Self.Manager" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrderBike" EntityType="Self.OrderBike" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Type" EntityType="Self.Type" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Bike_Type" Association="Self.FK_Bike_Type">
+      <End Role="Type" EntitySet="Type" />
+      <End Role="Bike" EntitySet="Bike" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BikeItems_Bike" Association="Self.FK_BikeItems_Bike">
+      <End Role="Bike" EntitySet="Bike" />
+      <End Role="BikeItems" EntitySet="BikeItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BikeItems_OrderBike" Association="Self.FK_BikeItems_OrderBike">
+      <End Role="OrderBike" EntitySet="OrderBike" />
+      <End Role="BikeItems" EntitySet="BikeItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderBike_Customer1" Association="Self.FK_OrderBike_Customer1">
+      <End Role="Customer" EntitySet="Customer" />
+      <End Role="OrderBike" EntitySet="OrderBike" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderBike_Manager1" Association="Self.FK_OrderBike_Manager1">
+      <End Role="Manager" EntitySet="Manager" />
+      <End Role="OrderBike" EntitySet="OrderBike" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

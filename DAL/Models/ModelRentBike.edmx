@@ -1,0 +1,430 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище RentBikeModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Bike">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BikeNumber" Type="varchar" MaxLength="50" />
+          <Property Name="TypeId" Type="int" />
+          <Property Name="Price" Type="money" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="BikeItems">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderBikeId" Type="int" />
+          <Property Name="BikeId" Type="int" />
+          <Property Name="StartRent" Type="datetime" />
+          <Property Name="FinishRent" Type="datetime" />
+          <Property Name="Pledqe" Type="money" />
+          <Property Name="PriceRent" Type="money" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="PhoneNumber" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="PassportNumber" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Manager">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="OrderBike">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerId" Type="int" />
+          <Property Name="ManagerId" Type="int" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="Total" Type="money" />
+        </EntityType>
+        <EntityType Name="Type">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Bike_Type">
+          <End Role="Type" Type="Self.Type" Multiplicity="0..1" />
+          <End Role="Bike" Type="Self.Bike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Type">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Bike">
+              <PropertyRef Name="TypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BikeItems_Bike">
+          <End Role="Bike" Type="Self.Bike" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BikeItems" Type="Self.BikeItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bike">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BikeItems">
+              <PropertyRef Name="BikeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BikeItems_OrderBike">
+          <End Role="OrderBike" Type="Self.OrderBike" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BikeItems" Type="Self.BikeItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderBike">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BikeItems">
+              <PropertyRef Name="OrderBikeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderBike_Customer1">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OrderBike" Type="Self.OrderBike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderBike">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderBike_Manager1">
+          <End Role="Manager" Type="Self.Manager" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OrderBike" Type="Self.OrderBike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Manager">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderBike">
+              <PropertyRef Name="ManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище RentBikeModelContainer">
+          <EntitySet Name="Bike" EntityType="Self.Bike" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BikeItems" EntityType="Self.BikeItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Manager" EntityType="Self.Manager" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderBike" EntityType="Self.OrderBike" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Type" EntityType="Self.Type" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Bike_Type" Association="Self.FK_Bike_Type">
+            <End Role="Type" EntitySet="Type" />
+            <End Role="Bike" EntitySet="Bike" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BikeItems_Bike" Association="Self.FK_BikeItems_Bike">
+            <End Role="Bike" EntitySet="Bike" />
+            <End Role="BikeItems" EntitySet="BikeItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BikeItems_OrderBike" Association="Self.FK_BikeItems_OrderBike">
+            <End Role="OrderBike" EntitySet="OrderBike" />
+            <End Role="BikeItems" EntitySet="BikeItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderBike_Customer1" Association="Self.FK_OrderBike_Customer1">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="OrderBike" EntitySet="OrderBike" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderBike_Manager1" Association="Self.FK_OrderBike_Manager1">
+            <End Role="Manager" EntitySet="Manager" />
+            <End Role="OrderBike" EntitySet="OrderBike" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RentBikeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Bike">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BikeNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TypeId" Type="Int32" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="IsActive" Type="Boolean" />
+          <NavigationProperty Name="Type" Relationship="Self.FK_Bike_Type" FromRole="Bike" ToRole="Type" />
+          <NavigationProperty Name="BikeItems" Relationship="Self.FK_BikeItems_Bike" FromRole="Bike" ToRole="BikeItems" />
+        </EntityType>
+        <EntityType Name="BikeItems">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderBikeId" Type="Int32" />
+          <Property Name="BikeId" Type="Int32" />
+          <Property Name="StartRent" Type="DateTime" Precision="3" />
+          <Property Name="FinishRent" Type="DateTime" Precision="3" />
+          <Property Name="Pledqe" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PriceRent" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="Bike" Relationship="Self.FK_BikeItems_Bike" FromRole="BikeItems" ToRole="Bike" />
+          <NavigationProperty Name="OrderBike" Relationship="Self.FK_BikeItems_OrderBike" FromRole="BikeItems" ToRole="OrderBike" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PassportNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="OrderBike" Relationship="Self.FK_OrderBike_Customer1" FromRole="Customer" ToRole="OrderBike" />
+        </EntityType>
+        <EntityType Name="Manager">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="OrderBike" Relationship="Self.FK_OrderBike_Manager1" FromRole="Manager" ToRole="OrderBike" />
+        </EntityType>
+        <EntityType Name="OrderBike">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" />
+          <Property Name="ManagerId" Type="Int32" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="Total" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="BikeItems" Relationship="Self.FK_BikeItems_OrderBike" FromRole="OrderBike" ToRole="BikeItems" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_OrderBike_Customer1" FromRole="OrderBike" ToRole="Customer" />
+          <NavigationProperty Name="Manager" Relationship="Self.FK_OrderBike_Manager1" FromRole="OrderBike" ToRole="Manager" />
+        </EntityType>
+        <EntityType Name="Type">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Bike" Relationship="Self.FK_Bike_Type" FromRole="Type" ToRole="Bike" />
+        </EntityType>
+        <Association Name="FK_Bike_Type">
+          <End Role="Type" Type="Self.Type" Multiplicity="0..1" />
+          <End Role="Bike" Type="Self.Bike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Type">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Bike">
+              <PropertyRef Name="TypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BikeItems_Bike">
+          <End Role="Bike" Type="Self.Bike" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BikeItems" Type="Self.BikeItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bike">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BikeItems">
+              <PropertyRef Name="BikeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BikeItems_OrderBike">
+          <End Role="OrderBike" Type="Self.OrderBike" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BikeItems" Type="Self.BikeItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderBike">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BikeItems">
+              <PropertyRef Name="OrderBikeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderBike_Customer1">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OrderBike" Type="Self.OrderBike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderBike">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderBike_Manager1">
+          <End Role="Manager" Type="Self.Manager" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OrderBike" Type="Self.OrderBike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Manager">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderBike">
+              <PropertyRef Name="ManagerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RentBikeContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Bike" EntityType="Self.Bike" />
+          <EntitySet Name="BikeItems" EntityType="Self.BikeItems" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" />
+          <EntitySet Name="Manager" EntityType="Self.Manager" />
+          <EntitySet Name="OrderBike" EntityType="Self.OrderBike" />
+          <EntitySet Name="Type" EntityType="Self.Type" />
+          <AssociationSet Name="FK_Bike_Type" Association="Self.FK_Bike_Type">
+            <End Role="Type" EntitySet="Type" />
+            <End Role="Bike" EntitySet="Bike" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BikeItems_Bike" Association="Self.FK_BikeItems_Bike">
+            <End Role="Bike" EntitySet="Bike" />
+            <End Role="BikeItems" EntitySet="BikeItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BikeItems_OrderBike" Association="Self.FK_BikeItems_OrderBike">
+            <End Role="OrderBike" EntitySet="OrderBike" />
+            <End Role="BikeItems" EntitySet="BikeItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderBike_Customer1" Association="Self.FK_OrderBike_Customer1">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="OrderBike" EntitySet="OrderBike" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderBike_Manager1" Association="Self.FK_OrderBike_Manager1">
+            <End Role="Manager" EntitySet="Manager" />
+            <End Role="OrderBike" EntitySet="OrderBike" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище RentBikeModelContainer" CdmEntityContainer="RentBikeContext">
+          <EntitySetMapping Name="Bike">
+            <EntityTypeMapping TypeName="RentBikeModel.Bike">
+              <MappingFragment StoreEntitySet="Bike">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="BikeNumber" ColumnName="BikeNumber" />
+                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BikeItems">
+            <EntityTypeMapping TypeName="RentBikeModel.BikeItems">
+              <MappingFragment StoreEntitySet="BikeItems">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="OrderBikeId" ColumnName="OrderBikeId" />
+                <ScalarProperty Name="BikeId" ColumnName="BikeId" />
+                <ScalarProperty Name="StartRent" ColumnName="StartRent" />
+                <ScalarProperty Name="FinishRent" ColumnName="FinishRent" />
+                <ScalarProperty Name="Pledqe" ColumnName="Pledqe" />
+                <ScalarProperty Name="PriceRent" ColumnName="PriceRent" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customer">
+            <EntityTypeMapping TypeName="RentBikeModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PassportNumber" ColumnName="PassportNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Manager">
+            <EntityTypeMapping TypeName="RentBikeModel.Manager">
+              <MappingFragment StoreEntitySet="Manager">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderBike">
+            <EntityTypeMapping TypeName="RentBikeModel.OrderBike">
+              <MappingFragment StoreEntitySet="OrderBike">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="ManagerId" ColumnName="ManagerId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Type">
+            <EntityTypeMapping TypeName="RentBikeModel.Type">
+              <MappingFragment StoreEntitySet="Type">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
